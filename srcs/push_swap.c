@@ -48,18 +48,27 @@ void print_stack(const t_stack *list)
 {
     while (list != NULL)
     {
-        printf("Node:%d\n", list->val);
+        printf("Value:%d\n", list->val);
         list = list->next;
     }
     printf("\n");
 }
 
+void print_index(const t_stack *list)
+{
+    while (list != NULL)
+    {
+        printf("Index:%d\n", list->index);
+        list = list->next;
+    }
+    printf("\n");
+}
 
 void	ft_sort_3(t_stack **stack_a)
 {
 	t_stack	*highest_node;
-
-	highest_node = find_highest(*stack_a);
+	
+	highest_node = get_max(*stack_a);
 	if (*stack_a == highest_node)
 		move(rotate, stack_a, 'a');
 	else if ((*stack_a)->next == highest_node)
@@ -68,41 +77,202 @@ void	ft_sort_3(t_stack **stack_a)
 		move(node_swap, stack_a, 'a');
 }
 
-void	push_swap(t_stack **stack_a)
+int	get_rotate_direction(t_stack *stack)
 {
-	if ((*stack_a)->size == 2)
+	int	min;
+	int	index;
+	int	min_index;
+	int	median;
+
+	min = INT_MAX;
+	index = 0;
+	min_index = 0;
+	median = ft_list_size(stack) / 2;
+	while (stack)
+	{
+		if (stack->val < min)
+		{
+			min = stack->val;
+			min_index = index;
+		}
+		stack = stack->next;
+		index++;
+	}
+	if (min_index < median)
+		return (1);
+	else
+		return (0);
+}
+
+void	ft_sort_4_5(t_stack **stack_a, t_stack **stack_b)
+{
+	int	min;
+	int	rotate_direction;
+
+	while (ft_list_size(*stack_a) > 3)
+	{
+		min = get_min(*stack_a)->val;
+		rotate_direction = get_rotate_direction(*stack_a);
+		while ((*stack_a)->val != min)
+		{
+			if (rotate_direction == 1)
+				move(rotate, stack_a, 'a');
+			else
+				move(rev_rotate, stack_a, 'a');
+		}
+		push_to(stack_a, stack_b, 'b');
+	}
+	ft_sort_3(stack_a);
+	while (ft_list_size(*stack_b) >= 1)
+	{
+		push_to(stack_b, stack_a, 'a');
+	}
+}
+
+void	get_index(t_stack **first_node, int size)
+{
+	t_stack	*min_node;
+	t_stack	*tmp;
+	int index;
+	int min;
+
+	index = 0;
+	tmp = *first_node;
+	min_node = NULL;
+	while (index < size)
+	{
+		min = INT_MAX;
+		tmp = *first_node;
+		while (tmp != NULL /*&& index < size*/)
+		{
+			if (tmp->val < min && tmp->has_index == false)
+			{
+				min_node = tmp;
+				min = tmp->val;
+			}
+			tmp = tmp->next;
+		}
+		min_node->index = index;
+		min_node->has_index = true;
+		index++;
+	}
+}
+
+void	push_back_btoa(t_stack **stack_a, t_stack **stack_b, int bit_pos)
+{
+	int	size;
+	int	i;
+
+	size = ft_list_size(*stack_b);
+	i = 0;
+	if (check_if_ascending(*stack_a) && check_if_descending(*stack_b))
+	{
+		while (i++ < size)
+			push_to(stack_b, stack_a, 'a');
+	} 
+	i = 0;
+	while (*stack_b != NULL && i < size)
+	{
+		if (((*stack_b)->index & (1 << (bit_pos + 1))) == 0)
+			move(rotate, stack_b, 'b');
+		else
+			push_to(stack_b, stack_a, 'a');
+		i++;
+	}
+}
+
+int	get_max_bits(t_stack *stack)
+{
+	int	max_bits;
+	int	max;
+
+	max_bits = 0;
+	max = get_max(stack)->index;
+	while (max > 0)
+	{
+		max_bits++;
+		max = max >> 1;
+	}
+	return (max_bits);
+}
+
+void	ft_big_sort(t_stack **stack_a, t_stack **stack_b)
+{
+	int	bit_pos;
+	int size; 
+	int	i;
+	int	max_bits;
+
+	bit_pos = 0;
+	max_bits = get_max_bits(*stack_a);
+	while (!check_if_ascending(*stack_a) && bit_pos < max_bits)
+	{
+		i = 0;
+		size = ft_list_size(*stack_a);
+		while (*stack_a != NULL && i < size)
+		{
+			if ((((*stack_a)->index >> bit_pos) & 1) == 1)
+			{
+				move(rotate, stack_a, 'a');
+			}
+			else
+				push_to(stack_a, stack_b, 'b');
+			i++;
+		}
+		push_back_btoa(stack_a, stack_b, bit_pos);
+		/* while (*stack_b != NULL)
+		{
+			push_to(stack_b, stack_a, 'a');
+		} */
+		bit_pos++;
+	}
+}
+
+void	push_swap(t_stack **stack_a, t_stack **stack_b)
+{	
+	if (ft_list_size(*stack_a) == 2)
 		move(node_swap, stack_a, 'a');
-	if ((*stack_a)->size == 3)
+	else if (ft_list_size(*stack_a) == 3)
 		ft_sort_3(stack_a);
+	else if (ft_list_size(*stack_a) <= 5)
+		ft_sort_4_5(stack_a, stack_b);
+	else if (ft_list_size(*stack_a) > 5)
+	{
+		get_index(stack_a, ft_list_size(*stack_a));
+		ft_big_sort(stack_a, stack_b);
+	}
 }
 
 int main(int argc, char **argv)
 {
 	t_stack *stack_a;
+	t_stack *stack_b;
 	int i;
 
 	stack_a = NULL;
+	stack_b = NULL;
 	if (argc <= 1)
 		return (0);
 	check_init_errors(argc, argv);
 	i = 1;
 	stack_a = create_new_node(ft_atoi(argv[i]));
-	stack_a->size = 1;
+	//stack_a->size = 1;
 	while (++i < argc)
 	{
 		fill_stack(&stack_a, ft_atoi(argv[i]));
-		stack_a->size++;
+		//stack_a->size++;
 	}
+	//printf("Stack A before:\n");
+	//print_stack(stack_a);
+	
+	//printf("Size: %d\n", ft_list_size(stack_a));
 
-	printf("Stack A size: %zu:\n", stack_a->size);
-	printf("Stack A before:\n");
-	print_stack(stack_a);
-	
-	if (stack_a->size == 1)
+	if (ft_list_size(stack_a) == 1)
 		return (0);
-	if (check_sorted(stack_a) == 0)
-		push_swap(&stack_a);
-	
+	if (check_if_ascending(stack_a) == false)
+		push_swap(&stack_a, &stack_b);
+
+	//print_index(stack_a);
 	printf("Stack A after:\n");
 	print_stack(stack_a);
 

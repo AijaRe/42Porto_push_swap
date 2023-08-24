@@ -19,6 +19,7 @@ t_stack	*create_new_node(int val)
 	if (!new_node)
 		return (NULL);
 	new_node->val = val;
+	new_node->has_index = false;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -39,48 +40,84 @@ t_stack	*second_last_node(t_stack *top)
 	return (top);
 }
 
-// Adds a new node to the top of a list
-void	push_new_val(t_stack **top, int val)
-{
-	t_stack	*new_top;
-
-	new_top = create_new_node(val);
-	new_top->next = *top;
-	*top = new_top;
-}
-
 // Returns the node with the highest value
-t_stack	*find_highest(t_stack *stack)
+t_stack	*get_max(t_stack *stack)
 {
-	int		highest_val;
-	t_stack	*highest_node;
+	int		max_val;
+	t_stack	*max_node;
 
 	if (!stack)
 		return (NULL);
-	highest_val = INT_MIN;
+	max_val = INT_MIN;
 	while (stack)
 	{
-		if (stack->val > highest_val)
+		if (stack->val > max_val)
 		{
-			highest_val = stack->val;
-			highest_node = stack;
+			max_val = stack->val;
+			max_node = stack;
 		}
 		stack = stack->next;
 	}
-	return (highest_node);
+	return (max_node);
 }
 
-// Checks if given stack is sorted
-int	check_sorted(t_stack *stack)
+// Returns the node with the lowest value
+t_stack	*get_min(t_stack *stack)
+{
+	int		min_val;
+	t_stack	*min_node;
+
+	if (!stack)
+		return (NULL);
+	min_val = INT_MAX;
+	while (stack)
+	{
+		if (stack->val < min_val)
+		{
+			min_val = stack->val;
+			min_node = stack;
+		}
+		stack = stack->next;
+	}
+	return (min_node);
+}
+
+// Checks if given stack is sorted in ascending order
+bool	check_if_ascending(t_stack *stack)
+{
+	while (stack->next)
+	{
+		if (stack->val > stack->next->val)
+			return (false);
+		stack = stack->next;
+	}
+	return (true);
+}
+
+bool	check_if_descending(t_stack *stack)
 {
 	while (stack->next)
 	{
 		if (stack->val < stack->next->val)
-			return (1);
+			return (false);
 		stack = stack->next;
 	}
-	return (0);
+	return (true);
 }
+
+int	ft_list_size(t_stack *stack)
+{
+	int	size;
+
+	size = 0;
+	while (stack != NULL)
+	{
+		stack = stack->next;
+		size++;
+	}
+	return (size);
+}
+
 long	ft_atol(char *str)
 {
 	int	i;

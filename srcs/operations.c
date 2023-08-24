@@ -37,17 +37,33 @@ void	rev_rotate(t_stack **top)
 	*top = last;
 }
 
-// Push first element of stack 1 to the top of stack 2
-// by creating a new node on stack 2 with the value of 
-// the node on top of stack 1 and freeing the latter
-void	push_to(t_stack **top_1, t_stack **top_2, char list)
+/* // Adds a new node to the top of a list
+void	push_new_val(t_stack **top, int val)
 {
-	t_stack	*temp;
+	t_stack	*new_top;
 
-	push_new_val(top_2, (*top_1)->val);
-	temp = (*top_1);
-	*top_1 = (*top_1)->next;
-	free(temp);
+	new_top = create_new_node(val);
+	new_top->next = *top;
+	*top = new_top;
+} */
+
+// Push first element of stack 1 to the top of stack 2
+void	push_to(t_stack **stack_src, t_stack **stack_dst, char list)
+{
+	t_stack	*tmp;
+	
+	tmp = *stack_src;
+	*stack_src = (*stack_src)->next;
+	if (*stack_dst == NULL)
+	{	
+		*stack_dst = tmp;
+		(*stack_dst)->next = NULL;
+	}
+	else
+	{
+		tmp->next = *stack_dst;
+		*stack_dst = tmp;
+	}
 	write(1, "p", 1);
 	write(1, &list, 1);
 	write(1, "\n", 1);
