@@ -2,7 +2,7 @@
 
 void ft_exit_error()
 {
-	write(1, "Error\n", 6);
+	write(2, "Error\n", 6);
 	exit(1);
 }
 
@@ -135,8 +135,10 @@ long	ft_atol(char *str)
 			sign = -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i])
 	{
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			ft_exit_error();
 		nb = nb * 10;
 		nb = nb + (str[i] - '0');
 		i++;

@@ -17,32 +17,30 @@ void	free_nodes(t_stack **list)
 // Start from the head of the list
 // Traverse the list to find the last node
 // Create a new node and attach it to the last node
+// If the list is empty, make the new node the head of the list
 void	fill_stack(t_stack **list, int val)
 {
 	t_stack *last;
 	t_stack *new_node;
 	
-	last = *list;
-    while (last->next != NULL)
-    {
-        last = last->next;
-    }
-    new_node = create_new_node(val);
+	new_node = create_new_node(val);
     if (!new_node)
     {
         free_nodes(list);
         return ;
     }
+	if (*list == NULL)
+    {
+        *list = new_node;
+        return;
+    }
+	last = *list;
+    while (last->next != NULL)
+    {
+        last = last->next;
+    }
     last->next = new_node;
 }
-
-/* void	init_stack(t_stack *stack_a)
-{
-	stack_a->val = 0;
-	stack_a->pos = 0;
-	stack_a->size = 0;
-	stack_a->next = NULL;
-} */
 
 void print_stack(const t_stack *list)
 {
@@ -171,7 +169,7 @@ void	ft_radix_sort_stackb(t_stack **stack_a, t_stack **stack_b, int bit_pos)
 			push_to(stack_b, stack_a, 'a');
 	} 
 	i = 0;
-	while (!check_if_descending(*stack_b) && i < size)
+	while (*stack_b != NULL && i < size)
 	{
 		if ((((*stack_b)->index >> bit_pos) & 1) == 0)
 			move(rotate, stack_b, 'b');
@@ -200,19 +198,24 @@ void	ft_big_sort_radix(t_stack **stack_a, t_stack **stack_b)
 {
 	int	bit_pos;
 	int size; 
+	int	i;
 	int	max_bits;
 
 	bit_pos = 0;
 	max_bits = get_max_bits(*stack_a);
-	while (!check_if_ascending(*stack_a) && bit_pos < max_bits)
+	while (bit_pos < max_bits)
 	{
+		i = 0;
 		size = ft_list_size(*stack_a);
-		while (!check_if_ascending(*stack_a) && size--)
+		while (!check_if_ascending(*stack_a) && i < size)
 		{
 			if ((((*stack_a)->index >> bit_pos) & 1) == 1)
+			{
 				move(rotate, stack_a, 'a');
+			}
 			else
 				push_to(stack_a, stack_b, 'b');
+			i++;
 		}
 		ft_radix_sort_stackb(stack_a, stack_b, bit_pos + 1);
 		bit_pos++;
@@ -246,11 +249,11 @@ int main(int argc, char **argv)
 		return (0);
 	check_init_errors(argc, argv);
 	i = 1;
-	stack_a = create_new_node(ft_atoi(argv[i]));
-	while (++i < argc)
+	while (i < argc)
+	{
 		fill_stack(&stack_a, ft_atoi(argv[i]));
-	if (ft_list_size(stack_a) == 1)
-		return (0);
+		i++;
+	}
 	if (check_if_ascending(stack_a) == false)
 		push_swap(&stack_a, &stack_b);
 
