@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: arepsa <arepsa@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/08/28 09:55:41 by arepsa            #+#    #+#              #
+#    Updated: 2023/08/29 09:39:19 by arepsa           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME		=	push_swap
 SRCS_DIR	=	srcs
 OBJS_DIR	=	objs
@@ -7,8 +19,13 @@ LIBFT_DIR	=	./libft
 
 SRCS			=	push_swap.c \
 					check_init_errors.c \
-					ps_utils.c \
-					operations.c
+					operations1.c \
+					operations2.c \
+					atol.c \
+					list_utils1.c \
+					list_utils2.c \
+					small_sort.c \
+					big_sort.c
 
 CC			= cc
 LIBFLAGS	= ar -rcs
@@ -32,7 +49,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 $(LIBFT):
 	echo "Making libft..."
 	$(MAKE) -C $(LIBFT_DIR)
-
+	
 clean:
 	$(RM) $(OBJS_DIR) 
 	echo "Deleted $(NAME) $(OBJS_DIR)"
@@ -45,4 +62,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-#.SILENT:
+.SILENT:
