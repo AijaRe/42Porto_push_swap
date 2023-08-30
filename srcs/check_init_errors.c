@@ -1,4 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_init_errors.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arepsa <arepsa@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/28 09:57:09 by arepsa            #+#    #+#             */
+/*   Updated: 2023/08/28 11:56:21 by arepsa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
+
+static int	ft_intcmp(int a, int b)
+{
+	return (a - b);
+}
 
 static int	check_non_numeric(int argc, char **argv)
 {
@@ -10,7 +27,7 @@ static int	check_non_numeric(int argc, char **argv)
 	while (i < argc)
 	{
 		if (argv[i][j] == '\0')
-            return 1;
+			return (1);
 		while (argv[i][j] != '\0') 
 		{
 			if (argv[i][j] == '-' || argv[i][j] == '+')
@@ -48,8 +65,8 @@ static int	check_duplicates(int argc, char **argv)
 
 static int	out_of_int_range(int argc, char **argv)
 {
-	long num;
-	int	i;
+	long	num;
+	int		i;
 
 	i = 1;
 	while (i < argc)
@@ -62,13 +79,13 @@ static int	out_of_int_range(int argc, char **argv)
 	return (0);
 }
 
-int check_init_errors(int argc, char **argv)
+int	check_init_errors(int argc, char **argv)
 {
-	if(check_non_numeric(argc, argv) == 1)
+	if (check_non_numeric(argc, argv) == 1)
 		ft_exit_error();
-	if(check_duplicates(argc, argv) == 1)
+	if (check_duplicates(argc, argv) == 1)
 		ft_exit_error();
-	if(out_of_int_range(argc, argv) == 1)
+	if (out_of_int_range(argc, argv) == 1)
 		ft_exit_error();
 	return (0);
 }
