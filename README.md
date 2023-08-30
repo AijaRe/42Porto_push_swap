@@ -119,7 +119,7 @@ Radix algorithm is very stable :)
 
 (and therefore not flexible)
 
-# Deployment
+## Deployment
 
 To deploy this project run
 
