@@ -37,3 +37,24 @@ The last element becomes the first one.
 
 `rrr` : rra and rrb at the same time.
 
+Syntax for passing argument list in zsh: `ARG="4 67 3 87 23”; ./push_swap ${=ARG} | ./checker_linux ${=ARG}`
+
+Syntax for passing argument list in bash: `ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG`
+
+## Materials
+[Push Swap explained (medium)](https://medium.com/@jamierobertdawson/push-swap-the-least-amount-of-moves-with-two-stacks-d1e76a71789a)
+
+[Push Swap — A journey to find most efficient sorting algorithm (medium)](https://medium.com/@ayogun/push-swap-c1f5d2d41e97)
+
+[Insertion sort in small chunks (medium)](https://medium.com/@jamierobertdawson/push-swap-the-least-amount-of-moves-with-two-stacks-d1e76a71789a)
+
+[Push Swap Radix tutorial (medium)](https://medium.com/nerd-for-tech/push-swap-tutorial-fa746e6aba1e)
+
+[Oceano - Push Swap](https://www.youtube.com/watch?v=OaG81sDEpVk)
+
+[Sorting algorithms explained visually](https://www.youtube.com/watch?v=RfXt_qHDEPw)
+
+[Integer overflow](https://www.scaler.com/topics/c/overflow-and-underflow-in-c/)
+
+
+
