@@ -37,10 +37,6 @@ The last element becomes the first one.
 
 `rrr` : rra and rrb at the same time.
 
-Syntax for passing argument list in zsh: `ARG="4 67 3 87 23”; ./push_swap ${=ARG} | ./checker_linux ${=ARG}`
-
-Syntax for passing argument list in bash: `ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG`
-
 ## Materials
 [Push Swap explained (medium)](https://medium.com/@jamierobertdawson/push-swap-the-least-amount-of-moves-with-two-stacks-d1e76a71789a)
 
@@ -55,6 +51,89 @@ Syntax for passing argument list in bash: `ARG="4 67 3 87 23"; ./push_swap $ARG 
 [Sorting algorithms explained visually](https://www.youtube.com/watch?v=RfXt_qHDEPw)
 
 [Integer overflow](https://www.scaler.com/topics/c/overflow-and-underflow-in-c/)
+
+
+## Push Swap Plan
+Check if input is not empty.
+
+Check non-numeric characters in the input.
+
+Convert input to integers using atol
+
+Perform input error checks:
+ - Check input syntax (integers)
+ - >INT_MAX || < INT_MIN
+
+ - double numbers
+
+ - empty string
+
+Create/initialize node 
+
+Create node stack
+
+ - find last node
+
+ - append node
+
+Get stack size
+
+Implement push_swap commands: 
+
+ - swap
+
+ - rotate
+
+ - reverse rotate
+
+ - push
+
+Check if the list is already sorted.
+
+Sort 2, sort 3, sort 4 & 5
+
+Algorithm. Radix sort, using binary.
+
+ - Assign an index (positive number) to all the numbers, starting from smallest number. Create a flag “has_index” in the structure to be able to skip assigned numbers withing the loop.
+
+ - Sort the numbers by their index.
+
+ - Start with least significant bit, push all numbers that end with 0 from stack A to stack B.
+
+ - If not a 0, rotate stack to move to the next number.
+
+ - Optimization: In stack B, before pushing everything back to stack A, check if the bit before the one that was analyzed in stack A is also a 0. If so, no need to move, rotate the numbers. If the previous bit is 1, push back from B to A.
+
+ - Check the next bit until all bits are sorted.
+
+ - Free memory. Since all error checks were done before creating the stack and all the movements were done, using pointers to the pointers to nodes of stack A, only need to free the nodes of stack A at the end of the program.
+
+
+## Number of moves
+|      | **100** | **500** |
+| ---- | ------- | ------- |
+| min  | 855     | 5739    |
+| max  | 857     | 5741    |
+
+Radix algorithm is very stable :) 
+
+(and therefore not flexible)
+
+# Deployment
+
+To deploy this project run
+
+```
+  make
+```
+To see the list of movements run the executable followed by the list of arguments
+```
+./push_swap 2 1 -3 5
+```
+
+Syntax for passing argument list in zsh: `ARG="4 67 3 87 23”; ./push_swap ${=ARG} | ./checker ${=ARG}`
+
+Syntax for passing argument list in bash: `ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker $ARG`
 
 
 
