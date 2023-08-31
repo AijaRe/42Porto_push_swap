@@ -56,12 +56,10 @@ The last element becomes the first one.
 ## Push Swap Plan
 Check if input is not empty.
 
-Check non-numeric characters in the input.
-
-Convert input to integers using atol
+Convert input to integers using atol (inside error check)
 
 Perform input error checks:
- - Check input syntax (integers)
+ - non-numeric characters
  - >INT_MAX || < INT_MIN
 
  - double numbers
